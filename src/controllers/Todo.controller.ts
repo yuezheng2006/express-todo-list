@@ -1,9 +1,16 @@
 import { Request, Response } from "express";
-import IController from "./ControllerInterface";
 import TodoService from "../services/Todo.service";
 
-class TodoController implements IController {
+interface IController {
+    index(req: Request, res: Response): Response | Promise<Response>;
+    create(req: Request, res: Response): Response | Promise<Response>;
+    show(req: Request, res: Response): Response | Promise<Response>;
+    update(req: Request, res: Response): Response | Promise<Response>;
+    delete(req: Request, res: Response): Response | Promise<Response>;
+}
 
+class TodoController implements IController {
+    
     index = async (req: Request, res: Response): Promise<Response> => {
         try {
             const service: TodoService = new TodoService(req);
@@ -18,61 +25,7 @@ class TodoController implements IController {
         }
     }
 
-
-    create = async (req: Request, res: Response): Promise<Response> => {
-        try {
-            const service: TodoService = new TodoService(req);
-            const todo = await service.create();
-            console.log(todo);
-            return res.send({
-                data: todo,
-                message: "Create Todo Success"
-            })
-        } catch (error) {
-            return res.send(error)
-        }
-
-    }
-
-    show = async (req: Request, res: Response): Promise<Response> => {
-        try {
-            const service: TodoService = new TodoService(req);
-            const todo = await service.getOne();
-            return res.send({
-                data: todo,
-                message: "Get Todo by id => " + todo.id
-            })
-        } catch (error) {
-            return res.send(error);
-        }
-
-    }
-
-    update = async (req: Request, res: Response): Promise<Response> => {
-        try {
-            const service: TodoService = new TodoService(req);
-            const todo = await service.update();
-
-            return res.send({
-                message: `Update Todo success`
-            })
-        } catch (error) {
-            return res.send(error);
-        }
-    }
-
-    delete = async (req: Request, res: Response): Promise<Response> => {
-        try {
-            const service: TodoService = new TodoService(req);
-            const todo = await service.delete();
-
-            return res.send({
-                message: "Delete Todo Success"
-            })
-        } catch (error) {
-            return res.send(error);
-        }
-    }
+    // TODO implements all interface
 }
 
 export default new TodoController;
